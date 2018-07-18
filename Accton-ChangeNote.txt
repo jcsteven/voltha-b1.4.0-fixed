@@ -1,3 +1,6 @@
+Change information: 2018-0718
+1. VOL-1104: typed_ast Python dependency
+
 Change information: 2018-0713
 1. Add build script 
 2. Modify the broadcom_onu to accept the vendor_id='ISKL','ARSA'
