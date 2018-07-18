@@ -1,0 +1,70 @@
+# Copyright 2017-present Open Networking Foundation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+version: '2'
+
+services:
+
+ freeradius:
+  image: "${REGISTRY}tpdock/freeradius:latest"
+  ports:
+   - "1812:1812/udp"
+   - "1813:1813"
+   - "18120:18120"
+  environment:
+   RADIUS_LISTEN_IP: '*'
+   USERS_FILE: '/etc/raddb/users'
+   RADIUS_CLIENTS : 'SECRET@172.25.0.200'
+  volumes:
+   - "./data/users:/etc/raddb/users"
+  networks:
+   authnet:
+    ipv4_address: 172.25.0.100
+
+
+ onos:
+  image: "${REGISTRY}${REPOSITORY}voltha-onos:latest"
+  ports:
+   - "8101:8101" # ssh
+   - "6653:6653" # OF
+   - "8181:8181" # UI
+  environment:
+   ONOS_APPS: 'drivers,openflow-base'
+  networks:
+    authnet:
+     ipv4_address: 172.25.0.200
+
+# onos_config_push:
+#  image: "${REGISTRY}${REPOSITORY}voltha-config-push:${TAG:-latest}"
+#  environment:
+#   ONOS_CONNECTION: 'onos:8181'
+#  volumes:
+#   - "../docker/config/netcfg.json:/data/onos-config.json"
+#  networks:
+#   authnet:
+#  links:
+#   - "onos:onos"
+
+# freeradius-test:
+#  image: "${REGISTRY}marcelmaatkamp/freeradius:${RADIUS_TAG:-latest}"
+#  command: "radtest user password freeradius 0 SECRET"
+#  networks:
+#   authnet:
+#    ipv4_address: 172.25.0.101
+
+networks:
+  authnet:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.25.0.0/24

@@ -1,0 +1,10 @@
+# virtualenv dirs
+venv-darwin
+venv-linux
+
+# git
+.git
+.gitignore
+
+# npm
+**/node_modules

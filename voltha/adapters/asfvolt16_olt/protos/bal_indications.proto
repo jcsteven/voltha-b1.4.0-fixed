@@ -1,0 +1,81 @@
+//
+// Copyright 2017 the original author or authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+syntax = "proto3";
+
+option go_package = "github.com/opencord/voltha/protos/go/bal";
+
+import "bal_model_ids.proto";
+import "bal_model_types.proto";
+import "bal.proto";
+
+message BalIndications{
+   BalObjId     objType = 1; //type of object for which the indications have been received
+   uint32       sub_group = 22; //Its a new parameter introduced by broadcom to indicate
+                                //type of an indication within the object Type.
+   oneof u {
+         BalAccessTerminalInd access_term_ind                        = 2;  // Access Terminal
+         BalAccessTerminalOperStatusChange access_term_ind_op_state  = 3;  // Access Terminal Operational State Change
+         BalFlowOperStatusChange flow_op_state                       = 4;  // Flow Operational State Change
+         BalFlowInd flow_ind                                         = 5;  // Flow
+         BalGroupInd group_ind                                       = 6;  // Group
+         BalInterfaceOperStatusChange interface_op_state             = 7;  // Interface Operational State Change
+         BalInterfaceLos interface_los                               = 8;  // OLT alarms
+         BalInterfaceInd interface_ind                               = 9;  // Interface
+         BalInterfaceStat interface_stats                            = 10; // NNI statistics
+         BalSubscriberTerminalOperStatusChange terminal_op_state     = 11; // Subscriber Terminal Operational State Change
+         BalSubscriberTerminalSubTermDisc terminal_disc              = 12; // Subscriber discovery
+         BalSubscriberTerminalSubTermAlarm terminal_alarm            = 13; // Subscriber alarm
+         BalSubscriberTerminalDgi terminal_dgi                       = 14; // Subscriber dgi
+         BalSubscriberTerminalInd terminal_ind                       = 15; // Subscriber
+         BalTmQueueInd tm_queue_Ind                                  = 16; // TmQueue Ind
+         BalTmSchedInd tm_sched_Ind                                  = 17; // TmScheduler Ind
+         BalPacketBearerChannelRx  pktData                           = 18; // packet data
+         BalPacketItuOmciChannelRx balOmciResp                       = 19; // OMCI response
+         BalPacketIeeeOamChannelRx balOamResp                        = 20; // PLOAM response
+      }
+      string device_id                                               = 21; //Deviced Id
+      uint32 ind_present                                             = 23;
+}
+
+service BalInd {
+
+      //Handling of bal indications from the device
+      rpc BalAccTermInd(BalIndications) returns(BalErr) {}
+      rpc BalAccTermOperStsCngInd(BalIndications) returns(BalErr) {}
+      rpc BalFlowOperStsCng(BalIndications) returns(BalErr) {}
+      rpc BalFlowInd(BalIndications) returns(BalErr) {}
+      rpc BalGroupInd(BalIndications) returns(BalErr) {}
+      rpc BalIfaceOperStsCng(BalIndications) returns(BalErr) {}
+      rpc BalIfaceLos(BalIndications) returns(BalErr) {}
+      rpc BalIfaceInd(BalIndications) returns(BalErr) {}
+      rpc BalIfaceStat(BalIndications) returns(BalErr) {}
+      rpc BalSubsTermOperStsCng(BalIndications) returns(BalErr) {}
+      rpc BalSubsTermDiscoveryInd(BalIndications) returns(BalErr) {}
+      rpc BalSubsTermAlarmInd(BalIndications) returns(BalErr) {}
+      rpc BalSubsTermDgiInd(BalIndications) returns(BalErr) {}
+      rpc BalSubsTermInd(BalIndications) returns(BalErr) {}
+      rpc BalTmQueueIndInfo(BalIndications) returns(BalErr) {}
+      rpc BalTmSchedIndInfo(BalIndications) returns(BalErr) {}
+      rpc BalPktBearerChannelRxInd(BalIndications) returns(BalErr) {}
+      rpc BalPktOmciChannelRxInd(BalIndications) returns(BalErr) {}
+      rpc BalPktIeeeOamChannelRxInd(BalIndications) returns(BalErr) {}
+}
+
+service BalGetInd {
+      //Get bal indications from the device
+      rpc BalGetIndFromDevice(BalDefault) returns(BalIndications) {}
+}

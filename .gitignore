@@ -1,0 +1,89 @@
+# Gradle
+.gradle
+buildSrc/build
+
+# Python
+*.pyc
+
+# PyCharm
+.idea
+exportToHTML
+
+# Emacs
+*~
+.#*
+
+# Vagrant
+.vagrant
+*.box
+
+# Ansible
+ansible/*.retry
+
+# Virtualenv
+venv
+venv-darwin
+venv-linux
+
+# Temp data dir for testing
+tmp
+
+# Any vi swap files
+*.swp
+
+# Protobuf output files
+voltha/**/*.desc
+**/*_pb2.py
+**/*_pb2_grpc.py
+envoy/proto.pb
+envoy/go/envoyd/buildreport
+envoy/go/envoyd/envoyd
+
+# Editors
+*.bak
+*.project
+*.pydevproject
+
+# Docker
+.docker-base-built
+
+# Mac stuff
+.DS_Store
+**/.DS_Store
+
+# Ignore chameleon subdirectory
+chameleon
+
+# Companion git repos used in tests
+loxigen
+mininet
+oftest
+olt-oftest
+pox
+openflow
+
+# Generated docs
+**/*.pdf
+docs/pon-requirements/*.svg
+
+# Files copied over during make
+ofagent/protos/third_party/google
+ponsim/protos/third_party/google
+netconf/protos/*.proto
+netconf/protos/*.desc
+netconf/protos/third_party/google
+
+# Voltha CLI history files
+.voltha_cli_history
+**/.voltha_cli_history
+
+# Vagrant logfile
+*.log
+
+# gitbook artifacts
+docs/manuals/user/_book
+docs/manual/user/*.pdf
+docs/manuals/user/node_modules/
+.coverage
+coverage.xml
+nosetests.xml

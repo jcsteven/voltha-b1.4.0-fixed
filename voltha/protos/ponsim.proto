@@ -1,0 +1,136 @@
+syntax = "proto3";
+
+option go_package = "github.com/opencord/voltha/protos/go/voltha";
+
+package voltha;
+
+import "google/protobuf/empty.proto";
+import "openflow_13.proto";
+import "bbf_fiber_base.proto";
+import "bbf_fiber_gemport_body.proto";
+import "bbf_fiber_multicast_distribution_set_body.proto";
+import "bbf_fiber_multicast_gemport_body.proto";
+import "bbf_fiber_tcont_body.proto";
+import "bbf_fiber_traffic_descriptor_profile_body.proto";
+
+message PonSimDeviceInfo {
+    int32 nni_port = 1;
+    repeated int32 uni_ports = 2;
+}
+
+message FlowTable {
+    int32 port = 1;  // Used to address right device
+    repeated openflow_13.ofp_flow_stats flows = 2;
+}
+
+message PonSimFrame {
+    string id = 1;
+    bytes payload = 2;
+}
+
+message PonSimPacketCounter {
+    string name = 1;
+    int64 value = 2;
+}
+
+message PonSimPortMetrics {
+    string port_name = 1;
+    repeated PonSimPacketCounter packets = 2;
+}
+
+message PonSimMetrics {
+    string device = 1;
+    repeated PonSimPortMetrics metrics = 2;
+}
+
+message TcontInterfaceConfig {
+    bbf_fiber.TrafficDescriptorProfileData
+        traffic_descriptor_profile_config_data = 1;
+    bbf_fiber.TcontsConfigData tconts_config_data = 2;
+}
+
+message InterfaceConfig {
+    oneof interface_type {
+        bbf_fiber.ChannelgroupConfig channel_group_config = 1;
+        bbf_fiber.ChannelpartitionConfig channel_partition_config = 2;
+        bbf_fiber.ChannelpairConfig channel_pair_config = 3;
+        bbf_fiber.ChannelterminationConfig channel_termination_config = 4;
+        bbf_fiber.OntaniConfig ont_ani_config = 5;
+        bbf_fiber.VOntaniConfig vont_ani_config = 6;
+        bbf_fiber.VEnetConfig venet_config = 7;
+        bbf_fiber.TrafficDescriptorProfileData
+            traffic_descriptor_profile_config_data = 8;
+        bbf_fiber.TcontsConfigData tconts_config_data = 9;
+        bbf_fiber.GemportsConfigData gemports_config_data = 10;
+        bbf_fiber.MulticastGemportsConfigData
+            multicast_gemports_config_data = 11;
+        bbf_fiber.MulticastDistributionSetData
+            multicast_distribution_set_data = 12;
+    }
+}
+
+service PonSim {
+    rpc SendFrame(PonSimFrame)
+        returns (google.protobuf.Empty) {}
+
+    rpc ReceiveFrames(google.protobuf.Empty)
+        returns (stream PonSimFrame) {}
+
+    rpc GetDeviceInfo(google.protobuf.Empty)
+        returns(PonSimDeviceInfo) {}
+
+    rpc UpdateFlowTable(FlowTable)
+        returns(google.protobuf.Empty) {}
+
+    rpc GetStats(google.protobuf.Empty)
+        returns(PonSimMetrics) {}
+
+}
+
+service XPonSim {
+
+    rpc CreateInterface(InterfaceConfig)
+        returns(google.protobuf.Empty) {}
+
+    rpc UpdateInterface(InterfaceConfig)
+        returns(google.protobuf.Empty) {}
+
+    rpc RemoveInterface(InterfaceConfig)
+        returns(google.protobuf.Empty) {}
+
+    rpc CreateTcont(TcontInterfaceConfig)
+        returns(google.protobuf.Empty) {}
+
+    rpc UpdateTcont(TcontInterfaceConfig)
+        returns(google.protobuf.Empty) {}
+
+    rpc RemoveTcont(TcontInterfaceConfig)
+        returns(google.protobuf.Empty) {}
+
+    rpc CreateGemport(InterfaceConfig)
+        returns(google.protobuf.Empty) {}
+
+    rpc UpdateGemport(InterfaceConfig)
+        returns(google.protobuf.Empty) {}
+
+    rpc RemoveGemport(InterfaceConfig)
+        returns(google.protobuf.Empty) {}
+
+    rpc CreateMulticastGemport(InterfaceConfig)
+        returns(google.protobuf.Empty) {}
+
+    rpc UpdateMulticastGemport(InterfaceConfig)
+        returns(google.protobuf.Empty) {}
+
+    rpc RemoveMulticastGemport(InterfaceConfig)
+        returns(google.protobuf.Empty) {}
+
+    rpc CreateMulticastDistributionSet(InterfaceConfig)
+        returns(google.protobuf.Empty) {}
+
+    rpc UpdateMulticastDistributionSet(InterfaceConfig)
+        returns(google.protobuf.Empty) {}
+
+    rpc RemoveMulticastDistributionSet(InterfaceConfig)
+        returns(google.protobuf.Empty) {}
+}
