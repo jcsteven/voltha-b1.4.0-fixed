@@ -1,8 +1,6 @@
-Change information: 2018-0718
+b1 2018-0718 
 1. VOL-1104: typed_ast Python dependency
-
-Change information: 2018-0713
-1. Add build script 
-2. Modify the broadcom_onu to accept the vendor_id='ISKL','ARSA'
+2. Add build script 
+3. Modify the broadcom_onu to accept the vendor_id='ISKL','ARSA'
 b0
 1. Based on "git clone https://gerrit.opencord.org/voltha " -b 1.4.0
